@@ -9,5 +9,5 @@ end
 
 ActiveSupport.on_load :active_record do
   require 'activerecord/lookml/core'
-  ::ActiveRecord::Base.send :include, ActiveRecord::LookML
+  ::ActiveRecord::Base.send :include, ActiveRecord::LookML::Core
 end
