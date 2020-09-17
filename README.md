@@ -10,7 +10,7 @@ Add this line to your application's Gemfile:
 
 ```ruby
 group :development do
-  gem 'activerecord-lookml', git: 'git@github.com:wantedly/activerecord-looker.git'
+  gem 'activerecord-lookml'
 end
 ```
 
