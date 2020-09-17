@@ -16,38 +16,47 @@ module ActiveRecord
         #    "try_high_fives"=>4,
         #    "request_members_to_get_started"=>5,
         #    "done_announce_to_member"=>6,
-        #    "done_tutorial"=>7},
-        #  "member_tutorial_state"=>
-        #   {"explain_condition_survay"=>0,
-        #    "ask_condition"=>1,
-        #    "explain_high_fives"=>2,
-        #    "try_high_fives"=>3,
-        #    "done_tutorial"=>4}}
+        #    "done_tutorial"=>7}}
         #
         #
         # Output format:
         #
-        # dimension: status {
+        # dimension: manager_tutorial_state {
         #   case: {
-        #     when: {
-        #       sql: ${TABLE}.status = 0 ;;
-        #       label: "active"
+        #       when: {
+        #       sql: ${TABLE}.manager_tutorial_state = 0 ;;
+        #       label: "start_tutorial"
         #     }
         #     when: {
-        #       sql: ${TABLE}.status = 1 ;;
-        #       label: "deactivated"
+        #       sql: ${TABLE}.manager_tutorial_state = 1 ;;
+        #       label: "explain_condition_survay"
         #     }
         #     when: {
-        #       sql: ${TABLE}.status = 2 ;;
-        #       label: "invited_by_admin"
+        #       sql: ${TABLE}.manager_tutorial_state = 2 ;;
+        #       label: "ask_condition"
         #     }
         #     when: {
-        #       sql: ${TABLE}.status = 3 ;;
-        #       label: "requested_by_member"
+        #       sql: ${TABLE}.manager_tutorial_state = 3 ;;
+        #       label: "explain_high_fives"
+        #     }
+        #     when: {
+        #       sql: ${TABLE}.manager_tutorial_state = 4 ;;
+        #       label: "try_high_fives"
+        #     }
+        #     when: {
+        #       sql: ${TABLE}.manager_tutorial_state = 5 ;;
+        #       label: "request_members_to_get_started"
+        #     }
+        #     when: {
+        #       sql: ${TABLE}.manager_tutorial_state = 6 ;;
+        #       label: "done_announce_to_member"
+        #     }
+        #     when: {
+        #       sql: ${TABLE}.manager_tutorial_state = 7 ;;
+        #       label: "done_tutorial"
         #     }
         #   }
         # }
-        #
         # @see https://github.com/rails/rails/blob/master/activerecord/lib/active_record/enum.rb
         def enum_to_lookml
           defined_enums.map do |name, enum_values|
