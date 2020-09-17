@@ -1,28 +1,72 @@
-# Activerecord::Lookml
+# ActiveRecord::LookML
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/activerecord/lookml`. To experiment with that code, run `bin/console` for an interactive prompt.
+This gem is ActiveRecord extension for LookML (Looker).
 
-TODO: Delete this and the text above, and describe your gem
+
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'activerecord-lookml'
+group :development do
+  gem 'activerecord-lookml', git: 'git@github.com:wantedly/activerecord-looker.git'
+end
 ```
-
-And then execute:
-
-    $ bundle install
-
-Or install it yourself as:
-
-    $ gem install activerecord-lookml
 
 ## Usage
 
-TODO: Write usage instructions here
+### ActiveRecord::Enum
+
+Suppose you have ActiveRecord class with enum as below.
+
+```ruby
+class PulseOnboardingStatus < ApplicationRecord
+  MEMBER_TUTORIAL_STATE_ENUM_HASH = {
+    explain_condition_survay: 0,
+    ask_condition: 1,
+    explain_high_fives: 2,
+    try_high_fives: 3,
+    done_tutorial: 4,
+  }.freeze
+
+  enum member_tutorial_state: MEMBER_TUTORIAL_STATE_ENUM_HASH, _prefix: true
+end
+```
+
+You can generate LookML dimension as below.
+
+```
+$ ./bin/rails c
+
+> puts PulseOnboardingStatus.enum_to_lookm
+
+  dimension: member_tutorial_state {
+    case: {
+        when: {
+        sql: ${TABLE}.member_tutorial_state = 0 ;;
+        label: "explain_condition_survay"
+      }
+      when: {
+        sql: ${TABLE}.member_tutorial_state = 1 ;;
+        label: "ask_condition"
+      }
+      when: {
+        sql: ${TABLE}.member_tutorial_state = 2 ;;
+        label: "explain_high_fives"
+      }
+      when: {
+        sql: ${TABLE}.member_tutorial_state = 3 ;;
+        label: "try_high_fives"
+      }
+      when: {
+        sql: ${TABLE}.member_tutorial_state = 4 ;;
+        label: "done_tutorial"
+      }
+
+    }
+  }
+```
 
 ## Development
 
