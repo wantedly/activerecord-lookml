@@ -39,7 +39,7 @@ You can generate LookML dimension as below.
 ```
 $ ./bin/rails c
 
-> puts PulseOnboardingStatus.enum_to_lookm
+> puts PulseOnboardingStatus.enum_to_lookml
 
   dimension: member_tutorial_state {
     case: {
