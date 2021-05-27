@@ -37,6 +37,7 @@ jobs:
 
     env:
       USER: postgres
+      RUBYOPT: -W:deprecated
 
     steps:
     - uses: actions/checkout@v2
