@@ -109,7 +109,7 @@ view: pulse_onboarding_statuses {
       }
       when: {
         sql: ${TABLE}.manager_tutorial_state = 1 ;;
-        label: "explain_condition_survay"
+        label: "explain_condition_survey"
       }
       when: {
         sql: ${TABLE}.manager_tutorial_state = 2 ;;
@@ -143,7 +143,7 @@ view: pulse_onboarding_statuses {
     case: {
       when: {
         sql: ${TABLE}.member_tutorial_state = 0 ;;
-        label: "explain_condition_survay"
+        label: "explain_condition_survey"
       }
       when: {
         sql: ${TABLE}.member_tutorial_state = 1 ;;
