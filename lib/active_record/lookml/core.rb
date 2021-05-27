@@ -135,7 +135,22 @@ view: pulse_onboarding_statuses {
   }
             LOOKML
           when ActiveRecord::Enum::EnumType
+            enum_values = defined_enums[attribute]
+            when_lines_lookml = enum_values.map do |label, value|
+              <<-LOOKML
+      when: {
+        sql: ${TABLE}.#{attribute} = #{value} ;;
+        label: "#{label}"
+      }
+              LOOKML
+            end.join
+
             <<-LOOKML
+  dimension: #{attribute} {
+    case: {
+#{when_lines_lookml}
+    }
+  }
             LOOKML
           else
             raise "Unknown attribute type: #{type.class}"
