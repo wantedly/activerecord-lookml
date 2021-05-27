@@ -78,6 +78,69 @@ module ActiveRecord
             LOOKML
           end.join("\n")
         end
+
+        def to_lookml
+          dimensions_lookml = attribute_types.map do |attribute, type|
+            attribute_type_to_lookml(attribute, type)
+          end.join("\n")
+
+          fields_lookml = attribute_types.keys.map do |attribute|
+            "      #{attribute}"
+          end.join(",\n")
+
+          set_lookml = <<-LOOKML
+  set: detail {
+    fields: [
+#{fields_lookml}
+    ]
+  }
+          LOOKML
+
+          <<-LOOKML
+view: pulse_onboarding_statuses {
+  sql_table_name: `wantedly-1371.rdb.pulse_pulse_onboarding_statuses`;;
+
+#{dimensions_lookml}
+
+#{set_lookml}
+}
+          LOOKML
+        end
+
+        private
+        def attribute_type_to_lookml(attribute, type)
+          case type
+          when ActiveModel::Type::Integer
+            primary_key_lookml = attribute == "id" ? "primary_key: yes" : nil
+
+            <<-LOOKML
+  dimension: #{attribute} {
+    type: number
+    #{primary_key_lookml}
+    sql: ${TABLE}.#{attribute} ;;
+  }
+            LOOKML
+          when ActiveModel::Type::Boolean
+            <<-LOOKML
+  dimension: #{attribute} {
+    type: yesno
+    sql: ${TABLE}.#{attribute} ;;
+  }
+            LOOKML
+          when ActiveRecord::Type::DateTime
+            <<-LOOKML
+  dimension_group: #{attribute} {
+    type: time
+    sql: ${TABLE}.#{attribute} ;;
+  }
+            LOOKML
+          when ActiveRecord::Enum::EnumType
+            <<-LOOKML
+            LOOKML
+          else
+            raise "Unknown attribute type: #{type.class}"
+          end
+        end
       end
     end
   end
