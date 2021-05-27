@@ -79,7 +79,7 @@ module ActiveRecord
           end.join("\n")
         end
 
-        def to_lookml
+        def to_lookml(table_name_prefix: 'wantedly-1371.rdb.pulse_')
           dimensions_lookml = attribute_types.map do |attribute, type|
             attribute_type_to_dimension_lookml(attribute, type)
           end.join("\n")
@@ -99,7 +99,7 @@ module ActiveRecord
 
           <<-LOOKML
 view: pulse_onboarding_statuses {
-  sql_table_name: `wantedly-1371.rdb.pulse_pulse_onboarding_statuses`;;
+  sql_table_name: `#{table_name_prefix}#{table_name}`;;
 
 #{dimensions_lookml}
 #{set_lookml}}
