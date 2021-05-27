@@ -7,8 +7,3 @@ module ActiveRecord
     # Your code goes here...
   end
 end
-
-ActiveSupport.on_load :active_record do
-  require 'active_record/lookml/core'
-  ::ActiveRecord::Base.send :include, ActiveRecord::LookML::Core
-end
