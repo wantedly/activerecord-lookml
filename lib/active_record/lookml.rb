@@ -1,5 +1,5 @@
 require 'active_support/all'
-require "activerecord/lookml/version"
+require "active_record/lookml/version"
 
 module ActiveRecord
   module LookML
@@ -9,6 +9,6 @@ module ActiveRecord
 end
 
 ActiveSupport.on_load :active_record do
-  require 'activerecord/lookml/core'
+  require 'active_record/lookml/core'
   ::ActiveRecord::Base.send :include, ActiveRecord::LookML::Core
 end
