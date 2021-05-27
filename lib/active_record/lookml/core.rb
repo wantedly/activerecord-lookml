@@ -110,13 +110,17 @@ view: pulse_onboarding_statuses {
         def attribute_type_to_dimension_lookml(attribute, type)
           case type
           when ActiveModel::Type::Integer
-            primary_key_lookml = attribute == "id" ? "primary_key: yes" : nil
+            params = {
+              type: "number",
+              primary_key: attribute == "id" ? "yes" : nil,
+              sql: "${TABLE}.#{attribute} ;;"
+            }.compact
+
+            params_lookml = params.map { |k, v| "    #{k}: #{v}" }.join("\n")
 
             <<-LOOKML
   dimension: #{attribute} {
-    type: number
-    #{primary_key_lookml}
-    sql: ${TABLE}.#{attribute} ;;
+#{params_lookml}
   }
             LOOKML
           when ActiveModel::Type::Boolean
