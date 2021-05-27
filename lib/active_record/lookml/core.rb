@@ -81,7 +81,7 @@ module ActiveRecord
 
         def to_lookml
           dimensions_lookml = attribute_types.map do |attribute, type|
-            attribute_type_to_lookml(attribute, type)
+            attribute_type_to_dimension_lookml(attribute, type)
           end.join("\n")
 
           fields_lookml = attribute_types.keys.map do |attribute|
@@ -108,7 +108,7 @@ view: pulse_onboarding_statuses {
         end
 
         private
-        def attribute_type_to_lookml(attribute, type)
+        def attribute_type_to_dimension_lookml(attribute, type)
           case type
           when ActiveModel::Type::Integer
             primary_key_lookml = attribute == "id" ? "primary_key: yes" : nil
