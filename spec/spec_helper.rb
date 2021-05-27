@@ -1,5 +1,15 @@
 require "bundler/setup"
+require "active_record"
 require "activerecord/lookml"
+
+DB_CONFIG = {
+  adapter: 'postgresql',
+  username: 'postgres',
+  min_messages: 'ERROR',
+}.with_indifferent_access.freeze
+
+ActiveRecord::Base.establish_connection(DB_CONFIG)
+load "#{File.dirname(__FILE__)}/schema.rb"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
