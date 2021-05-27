@@ -156,7 +156,7 @@ view: pulse_onboarding_statuses {
   }
             LOOKML
           else
-            raise "Unknown attribute type: #{type.class}"
+            raise "Unknown attribute type: #{attribute} #{type.class}"
           end
         end
 
@@ -167,7 +167,7 @@ view: pulse_onboarding_statuses {
           when ActiveRecord::Type::DateTime
             "#{attribute}_time"
           else
-            raise "Unknown attribute type: #{type.class}"
+            raise "Unknown attribute type: #{attribute} #{type.class}"
           end
         end
       end
