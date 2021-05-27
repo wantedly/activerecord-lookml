@@ -84,9 +84,10 @@ module ActiveRecord
             attribute_type_to_dimension_lookml(attribute, type)
           end.join("\n")
 
-          fields_lookml = attribute_types.keys.map do |attribute|
-            "      #{attribute}"
-          end.join(",\n")
+          fields = attribute_types.map do |attribute, type|
+            attribute_type_to_set_detail_field(attribute, type)
+          end.compact
+          fields_lookml = fields.map { |field| "      #{field}" }.join(",\n")
 
           set_lookml = <<-LOOKML
   set: detail {
@@ -152,6 +153,17 @@ view: pulse_onboarding_statuses {
     }
   }
             LOOKML
+          else
+            raise "Unknown attribute type: #{type.class}"
+          end
+        end
+
+        def attribute_type_to_set_detail_field(attribute, type)
+          case type
+          when ActiveModel::Type::Integer, ActiveModel::Type::Boolean, ActiveRecord::Enum::EnumType
+            attribute
+          when ActiveRecord::Type::DateTime
+            "#{attribute}_time"
           else
             raise "Unknown attribute type: #{type.class}"
           end
