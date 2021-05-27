@@ -102,9 +102,7 @@ view: pulse_onboarding_statuses {
   sql_table_name: `wantedly-1371.rdb.pulse_pulse_onboarding_statuses`;;
 
 #{dimensions_lookml}
-
-#{set_lookml}
-}
+#{set_lookml}}
           LOOKML
         end
 
