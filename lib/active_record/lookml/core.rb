@@ -78,6 +78,98 @@ module ActiveRecord
             LOOKML
           end.join("\n")
         end
+
+        def to_lookml(table_name_prefix: 'wantedly-1371.rdb.pulse_')
+          dimensions_lookml = attribute_types.map do |attribute, type|
+            attribute_type_to_dimension_lookml(attribute, type)
+          end.join("\n")
+
+          fields = attribute_types.map do |attribute, type|
+            attribute_type_to_set_detail_field(attribute, type)
+          end.compact
+          fields_lookml = fields.map { |field| "      #{field}" }.join(",\n")
+
+          set_lookml = <<-LOOKML
+  set: detail {
+    fields: [
+#{fields_lookml}
+    ]
+  }
+          LOOKML
+
+          <<-LOOKML
+view: pulse_onboarding_statuses {
+  sql_table_name: `#{table_name_prefix}#{table_name}`;;
+
+#{dimensions_lookml}
+#{set_lookml}}
+          LOOKML
+        end
+
+        private
+        def attribute_type_to_dimension_lookml(attribute, type)
+          case type
+          when ActiveModel::Type::Integer
+            params = {
+              type: "number",
+              primary_key: attribute == "id" ? "yes" : nil,
+              sql: "${TABLE}.#{attribute} ;;"
+            }.compact
+
+            params_lookml = params.map { |k, v| "    #{k}: #{v}" }.join("\n")
+
+            <<-LOOKML
+  dimension: #{attribute} {
+#{params_lookml}
+  }
+            LOOKML
+          when ActiveModel::Type::Boolean
+            <<-LOOKML
+  dimension: #{attribute} {
+    type: yesno
+    sql: ${TABLE}.#{attribute} ;;
+  }
+            LOOKML
+          when ActiveRecord::Type::DateTime
+            <<-LOOKML
+  dimension_group: #{attribute} {
+    type: time
+    sql: ${TABLE}.#{attribute} ;;
+  }
+            LOOKML
+          when ActiveRecord::Enum::EnumType
+            enum_values = defined_enums[attribute]
+            when_lines_lookml = enum_values.map do |label, value|
+              <<-LOOKML
+      when: {
+        sql: ${TABLE}.#{attribute} = #{value} ;;
+        label: "#{label}"
+      }
+              LOOKML
+            end.join
+
+            <<-LOOKML
+  dimension: #{attribute} {
+    case: {
+#{when_lines_lookml}
+    }
+  }
+            LOOKML
+          else
+            raise "Unknown attribute type: #{type.class}"
+          end
+        end
+
+        def attribute_type_to_set_detail_field(attribute, type)
+          case type
+          when ActiveModel::Type::Integer, ActiveModel::Type::Boolean, ActiveRecord::Enum::EnumType
+            attribute
+          when ActiveRecord::Type::DateTime
+            "#{attribute}_time"
+          else
+            raise "Unknown attribute type: #{type.class}"
+          end
+        end
       end
     end
   end
