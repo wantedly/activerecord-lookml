@@ -1,6 +1,6 @@
 require "bundler/setup"
 require "active_record"
-require "active_record/lookml"
+require "activerecord-lookml"
 
 DB_CONFIG = {
   adapter: 'postgresql',
