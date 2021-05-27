@@ -36,7 +36,6 @@ jobs:
           - 5432:5432
 
     env:
-      USER: postgres
       RUBYOPT: -W:deprecated
 
     steps:
