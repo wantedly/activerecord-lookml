@@ -1,4 +1,4 @@
-require_relative 'lib/activerecord/lookml/version'
+require_relative 'lib/active_record/lookml/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "activerecord-lookml"
