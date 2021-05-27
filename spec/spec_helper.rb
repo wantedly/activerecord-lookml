@@ -4,6 +4,7 @@ require "activerecord/lookml"
 
 DB_CONFIG = {
   adapter: 'postgresql',
+  host: 'localhost',
   username: 'postgres',
   min_messages: 'ERROR',
 }.with_indifferent_access.freeze
