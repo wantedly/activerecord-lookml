@@ -16,14 +16,27 @@ end
 
 ## Usage
 
-### ActiveRecord::Enum
+### Generate LookML view from ActiveRecord class
 
-Suppose you have ActiveRecord class with enum as below.
+Suppose you have ActiveRecord class as below:
 
 ```ruby
-class PulseOnboardingStatus < ApplicationRecord
+ActiveRecord::Schema.define(version: 2021_05_26_103300) do
+  create_table "pulse_onboarding_statuses", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "company_id", null: false
+    t.integer "member_tutorial_state"
+    t.boolean "completed", default: false, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+end
+```
+
+```ruby
+class PulseOnboardingStatus < ActiveRecord::Base
   MEMBER_TUTORIAL_STATE_ENUM_HASH = {
-    explain_condition_survay: 0,
+    explain_condition_survey: 0,
     ask_condition: 1,
     explain_high_fives: 2,
     try_high_fives: 3,
@@ -37,15 +50,31 @@ end
 You can generate LookML dimension as below.
 
 ```
-$ ./bin/rails c
+> puts PulseOnboardingStatus.to_lookml
+view: pulse_onboarding_statuses {
+  sql_table_name: `wantedly-1371.rdb.pulse_pulse_onboarding_statuses`;;
 
-> puts PulseOnboardingStatus.enum_to_lookml
+  dimension: id {
+    type: number
+    primary_key: yes
+    sql: ${TABLE}.id ;;
+  }
+
+  dimension: user_id {
+    type: number
+    sql: ${TABLE}.user_id ;;
+  }
+
+  dimension: company_id {
+    type: number
+    sql: ${TABLE}.company_id ;;
+  }
 
   dimension: member_tutorial_state {
     case: {
-        when: {
+      when: {
         sql: ${TABLE}.member_tutorial_state = 0 ;;
-        label: "explain_condition_survay"
+        label: "explain_condition_survey"
       }
       when: {
         sql: ${TABLE}.member_tutorial_state = 1 ;;
@@ -66,6 +95,34 @@ $ ./bin/rails c
 
     }
   }
+
+  dimension: completed {
+    type: yesno
+    sql: ${TABLE}.completed ;;
+  }
+
+  dimension_group: created_at {
+    type: time
+    sql: ${TABLE}.created_at ;;
+  }
+
+  dimension_group: updated_at {
+    type: time
+    sql: ${TABLE}.updated_at ;;
+  }
+
+  set: detail {
+    fields: [
+      id,
+      user_id,
+      company_id,
+      member_tutorial_state,
+      completed,
+      created_at_time,
+      updated_at_time
+    ]
+  }
+}
 ```
 
 ## Development
