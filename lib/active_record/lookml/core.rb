@@ -130,7 +130,7 @@ view: pulse_onboarding_statuses {
     sql: ${TABLE}.#{attribute} ;;
   }
             LOOKML
-          when ActiveRecord::Type::DateTime
+          when ActiveRecord::Type::DateTime, ActiveRecord::AttributeMethods::TimeZoneConversion::TimeZoneConverter
             <<-LOOKML
   dimension_group: #{attribute} {
     type: time
@@ -164,7 +164,7 @@ view: pulse_onboarding_statuses {
           case type
           when ActiveModel::Type::Integer, ActiveModel::Type::Boolean, ActiveRecord::Enum::EnumType
             attribute
-          when ActiveRecord::Type::DateTime
+          when ActiveRecord::Type::DateTime, ActiveRecord::AttributeMethods::TimeZoneConversion::TimeZoneConverter
             "#{attribute}_time"
           else
             raise "Unknown attribute type: #{attribute} #{type.class}"
