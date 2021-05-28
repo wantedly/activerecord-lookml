@@ -1,5 +1,9 @@
 ## Unreleased
 
+## 0.2.1
+
+Bug fixes and minor improvements.
+
 ## 0.2.0
 
 - Feature: LookML view generation from ActiveRecord class
