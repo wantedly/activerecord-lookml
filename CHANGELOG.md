@@ -1,5 +1,8 @@
 ## Unreleased
 
+## 0.3.1
+
+- Bugfix.
 ## 0.3.0
 
 - Fature: Support String column.
