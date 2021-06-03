@@ -1,8 +1,13 @@
 ## Unreleased
 
+## 0.3.0
+
+- Fature: Support String column.
+- Internal change for LookML string generation.
+
 ## 0.2.1
 
-Bug fixes and minor improvements.
+Bug fixes and minor improvements only.
 
 ## 0.2.0
 
