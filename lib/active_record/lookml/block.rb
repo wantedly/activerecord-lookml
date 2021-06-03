@@ -14,7 +14,9 @@ module ActiveRecord
 
       def to_lookml(indent_level: 0)
         indent = '  ' * indent_level
-        lookml = "#{indent}#{@type}: #{@name} {\n"
+        lookml = "#{indent}#{@type}:"
+        lookml << " #{@name}" if @name
+        lookml << " {\n"
         @fields.each_with_index do |field, index|
           lookml << "\n" if index > 0 && field.is_a?(Block)
           lookml << field.to_lookml(indent_level: indent_level + 1)
