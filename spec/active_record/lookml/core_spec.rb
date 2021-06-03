@@ -100,6 +100,11 @@ view: pulse_onboarding_statuses {
     }
   }
 
+  dimension: session_id {
+    type: string
+    sql: ${TABLE}.session_id ;;
+  }
+
   dimension: completed {
     type: yesno
     sql: ${TABLE}.completed ;;
@@ -122,6 +127,7 @@ view: pulse_onboarding_statuses {
       company_id,
       manager_tutorial_state,
       member_tutorial_state,
+      session_id,
       completed,
       created_at_time,
       updated_at_time
