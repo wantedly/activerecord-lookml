@@ -36,6 +36,11 @@ module ActiveRecord
               b << Field.new(name: "type", value: "yesno")
               b << Field.new(name: "sql", value: "${TABLE}.#{attribute} ;;")
             end
+          when ActiveModel::Type::String
+            Block.new(type: "dimension", name: attribute) do |b|
+              b << Field.new(name: "type", value: "string")
+              b << Field.new(name: "sql", value: "${TABLE}.#{attribute} ;;")
+            end
           when ActiveRecord::Type::DateTime, ActiveRecord::AttributeMethods::TimeZoneConversion::TimeZoneConverter
             Block.new(type: "dimension_group", name: attribute) do |b|
               b << Field.new(name: "type", value: "time")
