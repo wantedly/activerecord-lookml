@@ -2,7 +2,7 @@ require 'models/pulse_onboarding_status'
 
 RSpec.describe ActiveRecord::LookML::Core do
   it "adds .to_lookml method to ActiveRecord::Base" do
-    expect(ActiveRecord::Base.to_lookml).to eq ""
+    expect(ActiveRecord::Base.respond_to?(:to_lookml)).to be_truthy
   end
 
   describe ".to_lookml" do
